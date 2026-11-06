@@ -13,20 +13,23 @@ volatile bool __pending_gesture;
 volatile uint64_t __last_gesture_time;
 volatile uint64_t __last_cmd_tab_time;
 
+// SLSRequestNotificationsForWindows subscribes nothing when given 1024 or more windows.
+#define WINDOW_NOTIFICATION_CAP 1023
+
 static void update_window_notifications(void)
 {
     int window_count = 0;
-    uint32_t window_list[1024] = {0};
+    uint32_t window_list[WINDOW_NOTIFICATION_CAP];
 
     if (workspace_is_macos_sequoia() || workspace_is_macos_tahoe()) {
         // NOTE(asmvik): Subscribe to all windows because of window_destroyed (and ordered) notifications
         table_for (struct window *window, g_window_manager.window, {
-            window_list[window_count++] = window->id;
+            if (window_count < WINDOW_NOTIFICATION_CAP) window_list[window_count++] = window->id;
         })
     } else {
         // NOTE(asmvik): Subscribe to windows that have a feedback_border because of window_ordered notifications
         table_for (struct window_node *node, g_window_manager.insert_feedback, {
-            window_list[window_count++] = node->window_order[0];
+            if (window_count < WINDOW_NOTIFICATION_CAP) window_list[window_count++] = node->window_order[0];
         })
     }
 
