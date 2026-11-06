@@ -444,6 +444,8 @@ static EVENT_HANDLER(APPLICATION_VISIBLE)
     for (int i = 0; i < window_count; ++i) {
         struct window *window = window_list[i];
 
+        if (window_check_flag(window, WINDOW_TAB_MEMBER)) continue;
+
         if (window_manager_should_manage_window(window) && !window_manager_find_managed_window(&g_window_manager, window)) {
             struct view *view = space_manager_find_view(&g_space_manager, window_space(window->id));
             if (view->layout == VIEW_FLOAT) continue;
