@@ -964,9 +964,11 @@ static void debug_tab_event(const char *event, uint32_t wid)
     debug("%s: %s %d ordered_in=%d\n", event, window ? window->application->name : "<untracked>", wid, ordered_in);
 }
 
+// context is the retained AX element of the incoming tab; it is the only handle on a tab yabai has not seen.
 static EVENT_HANDLER(TABBED_WINDOW_FOCUSED)
 {
-    debug_tab_event(__FUNCTION__, (uint32_t)(intptr_t) context);
+    debug_tab_event(__FUNCTION__, (uint32_t) param1);
+    CFRelease(context);
 }
 
 static EVENT_HANDLER(SLS_WINDOW_VISIBLE)
