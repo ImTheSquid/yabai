@@ -952,6 +952,36 @@ static EVENT_HANDLER(SLS_WINDOW_ORDERED)
     if (node) SLSOrderWindow(g_connection, node->feedback_window.id, 1, node->window_order[0]);
 }
 
+static void debug_tab_event(const char *event, uint32_t wid)
+{
+    if (!g_verbose) return;
+
+    struct window *window = window_manager_find_window(&g_window_manager, wid);
+    uint8_t ordered_in = 0;
+    SLSWindowIsOrderedIn(g_connection, wid, &ordered_in);
+    debug("%s: %s %d ordered_in=%d\n", event, window ? window->application->name : "<untracked>", wid, ordered_in);
+}
+
+static EVENT_HANDLER(TABBED_WINDOW_FOCUSED)
+{
+    debug_tab_event(__FUNCTION__, (uint32_t)(intptr_t) context);
+}
+
+static EVENT_HANDLER(SLS_WINDOW_VISIBLE)
+{
+    debug_tab_event(__FUNCTION__, (uint32_t)(intptr_t) context);
+}
+
+static EVENT_HANDLER(SLS_ADDED_TO_SPACE)
+{
+    debug_tab_event(__FUNCTION__, (uint32_t)(intptr_t) context);
+}
+
+static EVENT_HANDLER(SLS_REMOVED_FROM_SPACE)
+{
+    debug_tab_event(__FUNCTION__, (uint32_t)(intptr_t) context);
+}
+
 static EVENT_HANDLER(SLS_WINDOW_DESTROYED)
 {
     uint32_t wid = (uint64_t)(intptr_t) context;

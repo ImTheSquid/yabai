@@ -11,6 +11,8 @@ typedef OBSERVER_CALLBACK(observer_callback);
 #define AX_APPLICATION_WINDOW_TITLE_CHANGED_INDEX 4
 #define AX_APPLICATION_WINDOW_MENU_OPENED_INDEX   5
 #define AX_APPLICATION_WINDOW_MENU_CLOSED_INDEX   6
+// Private AppKit notification; kept out of AX_APPLICATION_ALL so apps that reject it stay observable.
+#define AX_APPLICATION_WINDOW_FOCUSED_TAB_INDEX   7
 
 #define AX_APPLICATION_WINDOW_CREATED       (1 << AX_APPLICATION_WINDOW_CREATED_INDEX)
 #define AX_APPLICATION_WINDOW_FOCUSED       (1 << AX_APPLICATION_WINDOW_FOCUSED_INDEX)
@@ -51,7 +53,8 @@ static const char *ax_application_notification_str[] =
     [AX_APPLICATION_WINDOW_RESIZED_INDEX]       = "kAXWindowResizedNotification",
     [AX_APPLICATION_WINDOW_TITLE_CHANGED_INDEX] = "kAXTitleChangedNotification",
     [AX_APPLICATION_WINDOW_MENU_OPENED_INDEX]   = "kAXMenuOpenedNotification",
-    [AX_APPLICATION_WINDOW_MENU_CLOSED_INDEX]   = "kAXMenuClosedNotification"
+    [AX_APPLICATION_WINDOW_MENU_CLOSED_INDEX]   = "kAXMenuClosedNotification",
+    [AX_APPLICATION_WINDOW_FOCUSED_TAB_INDEX]   = "AXFocusedTabChanged"
 };
 
 static CFStringRef ax_application_notification[] =
@@ -62,7 +65,8 @@ static CFStringRef ax_application_notification[] =
     [AX_APPLICATION_WINDOW_RESIZED_INDEX]       = kAXWindowResizedNotification,
     [AX_APPLICATION_WINDOW_TITLE_CHANGED_INDEX] = kAXTitleChangedNotification,
     [AX_APPLICATION_WINDOW_MENU_OPENED_INDEX]   = kAXMenuOpenedNotification,
-    [AX_APPLICATION_WINDOW_MENU_CLOSED_INDEX]   = kAXMenuClosedNotification
+    [AX_APPLICATION_WINDOW_MENU_CLOSED_INDEX]   = kAXMenuClosedNotification,
+    [AX_APPLICATION_WINDOW_FOCUSED_TAB_INDEX]   = CFSTR("AXFocusedTabChanged")
 };
 
 struct application
